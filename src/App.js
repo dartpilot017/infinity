@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import SideBar from "./components/sidebar";
+import Header from "./components/header";
+import OverviewPage from "./components/pages/overviewPage";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import Campaign from "./components/pages/campaign";
+import CampaignInfo from "./components/pages/campaignInfo";
+
+import CreateCampaigns from "./components/pages/createCampaign";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <div className="w-[292px] fixed">
+          <SideBar />
+        </div>
+        <div className="md:ml-[292px]">
+          <Header />
+          <Routes>
+            {/* Dashboard */}
+            <Route path="/" element={<OverviewPage />} />
+            <Route path="/overview" element={<OverviewPage />} />
+            <Route path="/campaign" element={<Campaign />} />
+
+            <Route path="/create-campaigns" element={<CreateCampaigns />} />
+
+            <Route
+              path="/campaign/:campaignName/:id"
+              element={<CampaignInfo />}
+            />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 }
