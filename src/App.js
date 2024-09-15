@@ -5,7 +5,7 @@ import OverviewPage from "./components/pages/overviewPage";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import Campaign from "./components/pages/campaign";
 import CampaignInfo from "./components/pages/campaignInfo";
-
+import EditCampaigns from "./components/pages/editCampaign";
 import CreateCampaigns from "./components/pages/createCampaign";
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
             <Route path="/campaign" element={<Campaign />} />
 
             <Route path="/create-campaigns" element={<CreateCampaigns />} />
+            <Route path="/edit-campaigns/:id" element={<EditCampaigns />} />
 
             <Route
               path="/campaign/:campaignName/:id"

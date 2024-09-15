@@ -5,7 +5,6 @@ import { FaArrowLeft } from "react-icons/fa";
 const CampaignInfo = () => {
   const { id } = useParams();
   const [campaign, setCampaign] = useState({});
-  const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,27 +15,6 @@ const CampaignInfo = () => {
 
   const handleBack = () => {
     navigate("/campaign");
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveChanges = () => {
-    // Update the campaign here
-    fetch(
-      `https://infinion-test-int-test.azurewebsites.net/api/campaign/${id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(campaign),
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setCampaign({ ...campaign, ...data });
-        setIsEditing(false);
-      });
   };
 
   return (
@@ -71,10 +49,7 @@ const CampaignInfo = () => {
           <input
             className="p-[10px] border-1 text-[#999999] rounded-[4px] w-full"
             value={campaign.campaignName}
-            onChange={(e) =>
-              setCampaign({ ...campaign, campaignName: e.target.value })
-            }
-            disabled={!isEditing}
+            disabled
           />
         </div>
 
@@ -85,13 +60,7 @@ const CampaignInfo = () => {
               type="date"
               className="p-[10px] border-1 text-[#999999] rounded-[4px] w-full"
               value={new Date(campaign.startDate).toLocaleDateString("en-CA")}
-              onChange={(e) =>
-                setCampaign({
-                  ...campaign,
-                  startDate: new Date(e.target.value).toISOString(),
-                })
-              }
-              disabled={!isEditing}
+              disabled
             />
           </div>
           <div className="w-[100%]">
@@ -100,13 +69,7 @@ const CampaignInfo = () => {
               type="date"
               className="p-[10px] border-1 text-[#999999] rounded-[4px] w-full"
               value={new Date(campaign.endDate).toLocaleDateString("en-CA")}
-              onChange={(e) =>
-                setCampaign({
-                  ...campaign,
-                  endDate: new Date(e.target.value).toISOString(),
-                })
-              }
-              disabled={!isEditing}
+              disabled
             />
           </div>
         </div>
@@ -132,10 +95,7 @@ const CampaignInfo = () => {
             <select
               className="border-1 px-[10px] pt-[10px]               pb-[10px] w-full"
               value={campaign.digestCampaign}
-              onChange={(e) =>
-                setCampaign({ ...campaign, digestCampaign: e.target.value })
-              }
-              disabled={!isEditing}
+              disabled
             >
               <option value="Yes">Yes</option>
               <option value="No">No</option>
@@ -148,10 +108,7 @@ const CampaignInfo = () => {
             <select
               className="border-1 px-[10px] pt-[10px] pb-[10px] w-full"
               value={campaign.dailyDigest}
-              onChange={(e) =>
-                setCampaign({ ...campaign, dailyDigest: e.target.value })
-              }
-              disabled={!isEditing}
+              disabled
             >
               <option value="Hourly">Hourly</option>
               <option value="Daily">Daily</option>
@@ -162,21 +119,10 @@ const CampaignInfo = () => {
         </div>
 
         <div className="flex gap-[30px] my-[50px]">
-          {isEditing ? (
-            <button
-              className="bg-[#990000] text-white py-[12px] px-[36px] rounded-[5px] text-[14px]"
-              onClick={handleSaveChanges}
-            >
-              Save Changes
-            </button>
-          ) : (
-            <button
-              className="border-2 text-black border-black py-[12px] px-[36px]  rounded-[5px] text-[14px]"
-              onClick={handleEdit}
-            >
-              Edit Campaign
-            </button>
-          )}
+          <button className="border-2 text-black border-black py-[12px] px-[36px]  rounded-[5px] text-[14px]">
+            Edit Campaign
+          </button>
+
           <button className="bg-[#990000] text-white py-[12px] px-[36px] rounded-[5px] text-[14px]">
             Stop Campaign
           </button>

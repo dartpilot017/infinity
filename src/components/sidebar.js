@@ -57,7 +57,6 @@ const SideBar = () => {
               className={
                 location.pathname === "/campaign" ? activeLink : normalLink
               }
-              // className="flex gap-[10px] rounded-[4px] px-[32px] py-[8px] text-#247B7B hover:bg-white"
             >
               <img
                 src={campaign}
@@ -72,7 +71,6 @@ const SideBar = () => {
               className={
                 location.pathname === "/test" ? activeLink : normalLink
               }
-              // className="flex gap-[10px] rounded-[4px] px-[32px] py-[8px] text-#247B7B hover:bg-white"
             >
               <HiOutlineLightBulb className="h-[24px] w-[24px]" />
               <p className="text-[14px] font-semibold">Market Intelligence</p>

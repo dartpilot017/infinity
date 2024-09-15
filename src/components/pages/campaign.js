@@ -16,8 +16,6 @@ const Campaign = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const navigate = useNavigate();
 
   const COLUMNS = [
@@ -51,9 +49,13 @@ const Campaign = () => {
       label: "Actions",
       renderCell: (item) => (
         <div className="flex gap-4 font-semibold text-[16px]">
-          <GoEye className="cursor-pointer" onClick={() => handleView(item)} />
+          <Link to={`/campaign/${item.campaignName}/${item.id}`}>
+            <GoEye className="cursor-pointer" />
+          </Link>
 
-          <FiEdit className="cursor-pointer" onClick={() => handleEdit(item)} />
+          <Link to={`/edit-Campaigns/${item.id}`}>
+            <FiEdit className="cursor-pointer" />
+          </Link>
           <FaTrashAlt
             className="cursor-pointer"
             onClick={() => handleDelete(item)}
@@ -115,20 +117,6 @@ const Campaign = () => {
       .catch((error) => {
         console.error("Error deleting item:", error);
       });
-  };
-
-  const handleView = (item) => {
-    navigate(`/campaign/${item.campaignName}/${item.id}`, {
-      state: {
-        paginationPage: pagination.state.page,
-      },
-    });
-  };
-
-  const handleEdit = (item) => {
-    // Navigate to the page where the campaign can be edited
-    console.log("Edit item:", item);
-    // Add navigation logic here
   };
 
   const theme = useTheme([
