@@ -8,7 +8,12 @@ const EditCampaign = () => {
   const [editCampaign, setEditCampaign] = useState({
     id: id,
     campaignName: "",
+    campaignDescription: "description",
     startDate: "",
+    endDate: "",
+    digestCampaign: true, // Boolean value
+    linkedKeywords: [],
+    dailyDigest: "yes",
   });
 
   useEffect(() => {
@@ -21,19 +26,35 @@ const EditCampaign = () => {
   }, [id]);
 
   const handleChange = (event) => {
-    setEditCampaign({
-      ...editCampaign,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+
+    // Convert string "true" or "false" to Boolean for digestCampaign field
+    if (name === "digestCampaign") {
+      setEditCampaign({
+        ...editCampaign,
+        [name]: value === "true",
+      });
+    } else {
+      setEditCampaign({
+        ...editCampaign,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Wrap the editCampaign object inside campaignDTO
+    const payload = {
+      campaignDTO: editCampaign,
+    };
+
     fetch(
       `https://infinion-test-int-test.azurewebsites.net/api/campaign/${id}`,
       {
         method: "PUT",
-        body: JSON.stringify(editCampaign),
+        body: JSON.stringify(payload),
         headers: {
           "Content-Type": "application/json",
         },
@@ -96,38 +117,51 @@ const EditCampaign = () => {
               onChange={(e) =>
                 setEditCampaign({
                   ...editCampaign,
-                  linkedKeywords: e.target.value.split("\n"),
+                  linkedKeywords: e.target.value
+                    .split("\n")
+                    .filter((keyword) => keyword !== ""),
                 })
               }
+              name="linkedKeywords"
             ></textarea>
           </div>
         </div>
 
         <div className="text-start mt-4">
           <div className="w-[100%]">
-            <p> Want to receive daily digest about the campaign?</p>
-            <select
-              name="receiveDailyDigest"
-              value={editCampaign.dailyDigest}
-              className="border-1 px-[10px] pt-[10px] pb-[10px] w-full"
+            <p>Want to receive daily digest about the campaign?</p>
+            <button
+              type="button"
+              className={`py-[10px] px-[20px] rounded-[5px] w-full ${
+                editCampaign.digestCampaign
+                  ? "bg-[#4CAF50] text-white"
+                  : "bg-[#ccc] text-black"
+              }`}
+              onClick={() =>
+                setEditCampaign({
+                  ...editCampaign,
+                  digestCampaign: !editCampaign.digestCampaign, // Toggle boolean
+                })
+              }
             >
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
+              {editCampaign.digestCampaign ? "ON" : "OFF"}
+            </button>
           </div>
         </div>
 
         <div className="text-start pt-4">
           <div className="w-[100%]">
-            <p> Kindly select the time you want tio receive daily digest</p>
+            <p> Kindly select the time you want to receive daily digest</p>
             <select
               name="digestFrequency"
               className="border-1 px-[10px] pt-[10px] pb-[10px] w-full"
+              onChange={handleChange}
+              value={editCampaign.digestFrequency || "Daily"}
             >
-              <option value="Yes">Hourly</option>
+              <option value="Hourly">Hourly</option>
               <option value="Daily">Daily</option>
-              <option value="Monthly">Monthly</option>
               <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
             </select>
           </div>
         </div>
